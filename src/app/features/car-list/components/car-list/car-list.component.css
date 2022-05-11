@@ -1,0 +1,13 @@
+.full-width-table {
+  width: 100%;
+}
+
+
+.tableInfoContainer {
+  background-color: rgb(252, 252, 252);
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}

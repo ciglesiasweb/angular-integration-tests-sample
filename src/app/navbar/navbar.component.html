@@ -1,0 +1,12 @@
+<div class="navBar" data-cy="menutop">
+  <div class="navBar__menu">
+    <nav [ngClass]="collapsed ? 'collapsed' : ''">
+      <a [routerLink]="['/', 'car-list']" (click)="this.collapsed = !this.collapsed" class="navBar__link"
+        >Listado de coches</a
+      >
+
+    </nav>
+  </div>
+
+
+</div>

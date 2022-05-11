@@ -1,0 +1,9 @@
+
+<form [formGroup]="searchForm" novalidate (ngSubmit)="onSubmit()">
+  <mat-form-field class="example-full-width">
+    <span matPrefix> </span>
+    <input type="tel" matInput placeholder="Buscar" name= "query" formControlName= "query" autocomplete="off" data-testid="searchField">
+    <button matSuffix mat-button data-testid="searchButton"><mat-icon >search</mat-icon></button>
+    </mat-form-field>
+
+</form>

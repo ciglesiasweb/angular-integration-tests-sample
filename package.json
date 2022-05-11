@@ -1,20 +1,30 @@
 {
-  "name": "angular-integration-tests-samples",
-  "version": "0.0.0",
+  "name": "angular-integration-tests-sample",
+  "version": "0.0.1",
+  "description": "angular POC for integration test with angular material",
+  "keywords": ["angular", "integration test", "jasmine", "material"],
+  "homepage": "https://github.com/ciglesiasweb/angular-integration-tests-sample",
+  "author": {
+    "name": "Carlos Iglesias",
+    "email": "caiglesias@atsistemas.com"
+  },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "concurrently  \"ng serve\"  \"npm run mocks\"",
+    "mocks": "json-server --watch mocks/db.json  --routes mocks/routes.json   --delay 800",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test --code-coverage"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~13.2.0",
+    "@angular/cdk": "^13.3.6",
     "@angular/common": "~13.2.0",
     "@angular/compiler": "~13.2.0",
     "@angular/core": "~13.2.0",
     "@angular/forms": "~13.2.0",
+    "@angular/material": "^13.3.6",
     "@angular/platform-browser": "~13.2.0",
     "@angular/platform-browser-dynamic": "~13.2.0",
     "@angular/router": "~13.2.0",
@@ -28,7 +38,9 @@
     "@angular/compiler-cli": "~13.2.0",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
+    "concurrently": "^7.1.0",
     "jasmine-core": "~4.0.0",
+    "json-server": "^0.17.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.1.0",
