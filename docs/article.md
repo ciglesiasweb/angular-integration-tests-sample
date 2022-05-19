@@ -1,12 +1,11 @@
 Hola, eres nuevo en el nuevo del testing? ¿Quieres saber en qué consisten los test de integración en angular? Bienvenidos!
 
 En este post quiero hablaros de los test de integración en angular.
-A menudo la gente pregunta en qué consisten los test de integración y de
-cuál es su diferencia en angular con los unitarios. 
+A menudo la gente pregunta en qué consisten los test de integración y de cuál es su diferencia en angular con los unitarios. 
 
 Gente muy relevante del mundo front nos invita a que los test que hagamos sean mas dirigidos a los test de integración que a los unitarios.
 
-s
+
 ![](https://raw.githubusercontent.com/ciglesiasweb/angular-integration-tests-sample/main/docs//images/tweets.png)
 
 La definición de test de integración en la wikipedia es la siguiente:
@@ -17,6 +16,7 @@ La definición de test de integración en la wikipedia es la siguiente:
 ## ¿En el mundo de angular a qué se refiere?
 
 En angular, para mostrar una página web (una componente "container") tenemos multitud de elementos que interactuan:
+
 * Servicios
 * Componentes, 
 * Pipes... 
@@ -33,7 +33,7 @@ Un test de integración testea la relación de elementos que nosotros deseamos.
 El diagrama de arriba nos muestra todos los elementos de una página web. Testear todos esos elementos en conjunción sería un test e2e y existen herramientas muy eficientes para ello (yo soy muy fanático de cypress)
 
 
-## ¿Qué políticas/ estrategias se testean?
+## ¿Qué políticas/estrategias se testean?
 Nosotros escogemos la estrategia de testeo. En la web de angular [Component testing scenarios](https://angular.io/guide/testing-components-scenarios) se nos plantean distintas situaciones de aplicaciones angular y de estrategias para testearlas. Ahí va algún ejemplo:
 
 * En el caso de una componente que llama a otra puede que con tan solo
@@ -78,6 +78,9 @@ Para certificar que las piezas de software de esta feature encajan definimos est
 * si nos encontamos en la pagina ?q=&#60;foo&#62; nos saldará el campo de búsqueda con foo y la tabla abajo con los resultados de la búsqueda.
 
 
+## Configuración del escenario del test
+
+
 Como en este test queremos simular las iteraciones de usuario lo primero que haremos es añadir a los elementos html clave selectores para poder usarlos en los tests:
 
 ![](https://raw.githubusercontent.com/ciglesiasweb/angular-integration-tests-sample/main/docs/images/att-selectors.png)
@@ -91,18 +94,15 @@ También nos creamos una función de ayuda en nuestro test:
   }
 `
 
-## Configuración del escenario del test
 
-A continuación tenemos que añadir al test la configuración necesaria para que renderice (en modo live) la página ficticia.... si pongo una sentencia debugger vereis a qué me refiero:
+A continuación tenemos que configurar el test para que renderice la página ficticia.... si pongo una sentencia debugger en el test vereis a qué me refiero:
 
+Configurar el test es ir añadiendo al beforeEach los elementos necesarios del test.
 ![](https://raw.githubusercontent.com/ciglesiasweb/angular-integration-tests-sample/main/docs/images/debugger-test.png)
 
-El navegador de jasmine "pinta" en cada test y ejecuta las iteraciones. Para que esto ocurra debemos de añadir todos los elementos necesarios.
+El navegador de jasmine "pinta" en cada test y ejecuta las iteraciones. Para que esto ocurra debemos de añadir todos los elementos necesarios: módulos de angular material tales como la tabla, el spinner y otros tantos.
 
-Configurar esta parte es quizá lo mas tedioso del test...
-
-
-En este fase resulta conveniente ejecutar tan solo el test de integración y obviar el resto, así trabajamos de una manera mas eficiente. Ejecutando el comando:
+Esta etapa es un tanto tediosa. Para que ser mas ágiles es conveniente ejecutar tan solo el test de integración sobre el que trabajamos y obviar el resto. Ejecutando el comando:
 
 `ng test -- --include src/app/features/car-list/containers`
 focalizaremos nuestro trabajo en ir pasito a pasito configurando el test... paciencia!
@@ -116,34 +116,35 @@ Enhorabuena! configurar un test de integración es arduo, pero ahora tienes una 
 
 Este costoso trabajo tiene muchas recompensas, adquieres una visión mas precisa de lo que compone una aplicación angular en cada escenario. en adelante tus desarrollos serán mejores!
 
-## vamos con los tests!
-Por supuesto! A continuación pongo un link al test de integración en particular y donde vienen comentarios aclaratorios. [link al test de integración](https://github.com/ciglesiasweb/angular-integration-tests-sample/blob/511c2cc2c9c8401340809837282b3e77fa5f67c3/src/app/features/car-list/containers/car-list-container/car-list-container.component.spec.ts)
+## Vamos con los tests!
+Por supuesto! A continuación pongo un link al test de integración y donde hay comentarios aclaratorios. [link al test de integración](https://github.com/ciglesiasweb/angular-integration-tests-sample/blob/main/src/app/features/car-list/containers/car-list-container/car-list-container.component.spec.ts)
 
-He metido dos describes ya que necesitaba de dos configuraciones diferentes una de ellas simula que estamos en la página ?q=foo
+
+Este test tiene la particularidad de tener dos describes ya que necesitaba de dos configuraciones diferentes una de ellas simula que estamos en la página ?q=foo
 
 
 ## Un test unitario también please.
 
-También he creado el test unitario de la componente que muestra la tabla de angular material. 
-Para testear una componente con comportamiento asíncrono (loader, tabla a continuación o mensaje de no hay datos) he seguido la parte de la guía [Component marble test](https://angular.io/guide/testing-components-scenarios#component-marble-tests)
+También he creado el test unitario de la componente que muestra la tabla de angular material. [Link al test unitario](https://github.com/ciglesiasweb/angular-integration-tests-sample/blob/main/src/app/features/car-list/components/car-list/car-list.component.spec.ts)
 
-Para la componente de la tabla los casos a testear son específicos de la componente:
+La componente es de naturaleza asíncrona, ya que pinta un loader, una tabla con la respuesta de un api de modo que he seguido la parte de la guía [Component marble test](https://angular.io/guide/testing-components-scenarios#component-marble-tests)
+
+
+Los casos a testear son específicos de la componente:
 
 * Enseña un loader antes de la respuesta del servidor.
-* Me pinta una tabla con las columnas que concuerden con la respuesta del api.
+* Pinta una tabla con las columnas que concuerden con la respuesta del api.
 * En caso de que no haya datos me pinta un mensaje de no hay datos.
-
 
 
 ## Conclusiones
 * Angular nos da de las herramientas necesarias para testear multitud de situaciones simples y complejas. En la web  de angular y particularmente en la sección [Component testing scenarios](https://angular.io/guide/testing-components-scenarios) hay mucha documentación.
-
 * Los test de integración dan confianza de que las distintas piezas de software se comunican bien.
 * Los test de integración nos da un conocimiento mas profundo de la aplicación.
-* Existen mecanismos para que el desarrollo de tests sea mas fácil como:
-  - el testear solo los que nos interesdan con `ng test -- --include path/to/element`
+* Existen mecanismos para que el implementar los test sea mas fácil como:
+  - Ejecutar los test que nos interesan con `ng test -- --include path/to/element`
   - Poniendo un `debugger` en un test se nos detiene el test y podemos ver que está renderizando jasmine.
 
 
-Bueno, espero que os haya gustado el post. Happy Testiiiiing!
+Bueno, espero que os haya gustado el post y... Happy Testiiiiing!
 
