@@ -163,21 +163,21 @@ describe('CarListContainerComponent - through the url/state ?q=foo ', () => {
     const searchFieldEl = getBySel(nativeElement, 'searchField');
     expect(searchFieldEl.value).toBe('foo');
 
-    const carsTableEl = getBySel(nativeElement, 'carsTable');
-    const rows = carsTableEl.querySelectorAll('.mat-row');
-    expect(rows.length).toBe(responseCarsApi.length);
+    const nativeTableEl = getBySel(nativeElement, 'carsTable');
+    const rows = nativeTableEl.querySelectorAll('.mat-row');
+    expect(rows.length)
+      .withContext(' has num rows')
+      .toBe(responseCarsApi.length);
 
-    rows[0]
-      .querySelectorAll('.mat-column-name')
-      .forEach((element: any, i: number) => {
-        expect(element.textContent).toContain(responseCarsApi[i].name);
-      });
+    rows.forEach((row: any, i: number) => {
+      expect(row.querySelector('.mat-column-name').textContent)
+        .withContext('column name contains')
+        .toContain(responseCarsApi[i].name);
 
-    rows[0]
-      .querySelectorAll('.mat-column-id')
-      .forEach((element: any, i: number) => {
-        expect(element.textContent).toContain(responseCarsApi[i].id);
-      });
+      expect(row.querySelector('.mat-column-id').textContent)
+        .withContext('column name contains')
+        .toContain(responseCarsApi[i].id);
+    });
   }));
 });
 

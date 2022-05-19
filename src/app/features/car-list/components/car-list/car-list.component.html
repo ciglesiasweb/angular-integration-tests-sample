@@ -27,14 +27,14 @@
     *ngIf="!isLoadingResults && !this.data.length"
     class="tableInfoContainer"
   >
-    <span>No hay datos</span>
+    <span data-testid="no-data">No hay datos</span>
   </div>
 
   <div
     *ngIf="isLoadingResults"
     style="display: flex; justify-content: center; align-items: center"
   >
-    <mat-progress-spinner color="primary" mode="indeterminate">
+    <mat-progress-spinner color="primary" mode="indeterminate"  data-testid="loader">
     </mat-progress-spinner>
   </div>
 

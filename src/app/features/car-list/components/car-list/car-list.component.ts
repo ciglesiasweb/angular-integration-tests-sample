@@ -50,6 +50,7 @@ export class CarListComponent implements AfterViewInit {
   }
 
   initDataTable(): void {
+    console.log('initDataTable');
     this.paginator.page
       .pipe(
         startWith([]),
@@ -60,20 +61,14 @@ export class CarListComponent implements AfterViewInit {
             .pipe(catchError(() => observableOf(null)));
         }),
         map((data) => {
-          // Flip flag to show that loading has finished.
           this.isLoadingResults = false;
           this.isRateLimitReached = data === null;
-
-          if (data === null) {
-            return [];
-          }
-
-          this.resultsLength = data && data.length;
+          this.resultsLength = (data && data.length) || 0;
           return data;
         })
       )
       .subscribe((data) => {
-        this.data = data;
+        this.data = data || [];
         this.changeDetectorRef.markForCheck();
       });
   }
