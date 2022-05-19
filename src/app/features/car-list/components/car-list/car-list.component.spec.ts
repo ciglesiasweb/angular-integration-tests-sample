@@ -51,7 +51,6 @@ describe('CarListComponent', () => {
 
     const q$ = cold('---x|', { x: responseCarsApi });
     listSpy.and.returnValue(q$);
-    console.log('test 1.1');
     fixture.detectChanges();
     const nativeElement = fixture.debugElement.nativeElement;
     expect(getBySel(nativeElement, 'loader'))
@@ -73,7 +72,7 @@ describe('CarListComponent', () => {
         .toContain(responseCarsApi[i].name);
 
       expect(row.querySelector('.mat-column-id').textContent)
-        .withContext('column name contains')
+        .withContext('column id contains')
         .toContain(responseCarsApi[i].id);
     });
   });
@@ -81,25 +80,6 @@ describe('CarListComponent', () => {
   it('should show a message with no data if api returns empty array', () => {
     const q$ = cold('---x|', { x: [] });
     listSpy.and.returnValue(q$);
-    console.log('test 1.1');
-    fixture.detectChanges();
-    const nativeElement = fixture.debugElement.nativeElement;
-    expect(getBySel(nativeElement, 'loader'))
-      .withContext('shows loader')
-      .toBeTruthy();
-
-    getTestScheduler().flush(); // flush the observables
-    fixture.detectChanges();
-
-    expect(getBySel(nativeElement, 'no-data'))
-      .withContext('shows no data span')
-      .toBeTruthy();
-  });
-
-  it('should show a message with no data if api returns null', () => {
-    const q$ = cold('---x|', { x: null });
-    listSpy.and.returnValue(q$);
-    console.log('test 1.1');
     fixture.detectChanges();
     const nativeElement = fixture.debugElement.nativeElement;
     expect(getBySel(nativeElement, 'loader'))

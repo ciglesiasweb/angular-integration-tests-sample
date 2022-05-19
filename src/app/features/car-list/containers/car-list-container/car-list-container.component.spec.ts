@@ -33,11 +33,11 @@ describe('CarListContainerComponent ', () => {
     await TestBed.configureTestingModule({
       declarations: [
         CarListContainerComponent,
-        SearchComponent, // Si.. necesitamos compilar también esta componente.
-        CarListComponent, // Si.. necesitamos compilar también esta componente.
+        SearchComponent, // Si.. necesitamos también compilar esta componente. Es un test de integración!
+        CarListComponent, // Si.. necesitamos también compilar esta componente. Es un test de integración!
       ],
       imports: [
-        NoopAnimationsModule, // Todos los imports necesdarios para que funcione el test.
+        NoopAnimationsModule, // Necesaria para que las animaciones no nos hagan ruido en los tests.
         HttpClientTestingModule,
         FormsModule,
         ReactiveFormsModule,
@@ -47,14 +47,14 @@ describe('CarListContainerComponent ', () => {
             component: CarListContainerComponent,
           },
         ]),
-        MatInputModule,
+        MatInputModule, //Añadimos los módulos material que usa la operativa
         MatFormFieldModule,
         MatIconModule,
         MatPaginatorModule,
         MatTableModule,
         MatProgressSpinnerModule,
       ],
-    }).compileComponents();
+    }).compileComponents(); // 🤠 Nos ha compilado las componentes que interactúan!
   });
 
   beforeEach(() => {
@@ -73,25 +73,32 @@ describe('CarListContainerComponent ', () => {
     expect(carsTable).toBeTruthy();
   });
 
+  // 🤓 El siguiente test usa fakeAsync ya que usa tick(). Es para comportamientos asíncronos.
   it('if we search by "foo" then the page redirects to ?q=foo', fakeAsync(() => {
     const val = 'foo';
     const nativeElement = fixture.debugElement.nativeElement;
     const searchFieldEl = getBySel(nativeElement, 'searchField');
     const searchButtonEl = getBySel(nativeElement, 'searchButton');
-    let router: Router = TestBed.inject(Router);
-    spyOn(router, 'navigate');
+    let router: Router = TestBed.inject(Router); // 🤓 nos traemos el Router del mecanismo de inyección de dependencias.
+    spyOn(router, 'navigate'); // 🧐 Espiamos el método navigate del router de angular
 
     searchFieldEl.value = val;
     searchFieldEl.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    searchButtonEl.click();
-    tick();
+    searchButtonEl.click(); // 🔨 actuamos  (Para saber mas busca Patrón AAA Testing) -  Arrange Act Assert.
+    tick(); // simulamos que ha pasado un tiempo.
     expect(router.navigate).toHaveBeenCalledWith(['/car-list'], {
       queryParams: { q: val },
     });
   }));
 });
+
+/**
+ * Nos hemos generado este segundo describe porque simoulamos que estamos en la ruta ?q=foo
+ * y necesitamos de una configuración "ActivatedRoute"  que no deseamos que esté en los casos del describe anterior.
+
+ */
 
 describe('CarListContainerComponent - through the url/state ?q=foo ', () => {
   let component: CarListContainerComponent;
@@ -132,7 +139,7 @@ describe('CarListContainerComponent - through the url/state ?q=foo ', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteSpy,
+          useValue: activatedRouteSpy, // 🤓 cuando se consulte en que url estamos usamos este espía.
         },
       ],
     }).compileComponents();
@@ -149,21 +156,23 @@ describe('CarListContainerComponent - through the url/state ?q=foo ', () => {
 
   it('Shows a table with the api response for "foo" and fill the search field with "foo"', fakeAsync(() => {
     const responseCarsApi = [
-      { id: 1, name: 'Peugeot 304 SW', brand: 'Peougeot', model: '304' },
-      { id: 2, name: 'Peugeot 308 SW', brand: 'Peougeot', model: '308' },
+      { id: 1, name: 'Peugeot 304 SW', brand: 'Peougeot', model: '304' }, //🚗
+      { id: 2, name: 'Peugeot 308 SW', brand: 'Peougeot', model: '308' }, // 🚙
     ];
 
-    const req = httpController.expectOne(`${environment.apiUrl}/cars?q=foo`);
+    const req = httpController.expectOne(`${environment.apiUrl}/cars?q=foo`); // Assert de que llamamos al api con la url que espeamos
     expect(req.request.method).toEqual('GET');
-    req.flush(responseCarsApi);
+    req.flush(responseCarsApi); // ordenamos que el api nos devuelva los [🚗, 🚙]
 
-    fixture.detectChanges();
+    fixture.detectChanges(); // importante. decimos a la compoenente que detecte los cambios.
     const nativeElement = fixture.debugElement.nativeElement;
 
     const searchFieldEl = getBySel(nativeElement, 'searchField');
     expect(searchFieldEl.value).toBe('foo');
 
     const nativeTableEl = getBySel(nativeElement, 'carsTable');
+
+    // 😃 aquí empezamos a comprobar que la tabla muestra los datos esperados.
     const rows = nativeTableEl.querySelectorAll('.mat-row');
     expect(rows.length)
       .withContext(' has num rows')
@@ -175,12 +184,13 @@ describe('CarListContainerComponent - through the url/state ?q=foo ', () => {
         .toContain(responseCarsApi[i].name);
 
       expect(row.querySelector('.mat-column-id').textContent)
-        .withContext('column name contains')
+        .withContext('column id contains')
         .toContain(responseCarsApi[i].id);
     });
   }));
 });
 
+// 🤓 utilidad para acceder a elementos
 function getBySel(nativeElement: any, id: string) {
   return nativeElement.querySelector(`[data-testid="${id}"]`);
 }

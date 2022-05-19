@@ -50,7 +50,6 @@ export class CarListComponent implements AfterViewInit {
   }
 
   initDataTable(): void {
-    console.log('initDataTable');
     this.paginator.page
       .pipe(
         startWith([]),
