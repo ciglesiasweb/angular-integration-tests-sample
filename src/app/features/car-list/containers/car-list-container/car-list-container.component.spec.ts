@@ -134,7 +134,7 @@ describe('CarListContainerComponent - through the url/state ?q=foo ', () => {
           provide: ActivatedRoute,
           useValue: {
             queryParams: of({ q: 'foo' }),
-          }, // 🤓 cuando se consulte en que url estamos usamos este espía.
+          }, // 🤓 mockeamos ActivatedRoute
         },
       ],
     }).compileComponents();
