@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
@@ -104,12 +103,6 @@ describe('CarListContainerComponent - through the url/state ?q=foo ', () => {
   let component: CarListContainerComponent;
   let fixture: ComponentFixture<CarListContainerComponent>;
   let httpController: HttpTestingController;
-  let httpClient: HttpClient;
-
-  const activatedRouteSpy = {
-    queryParams: of({ q: 'foo' }),
-    ...jasmine.createSpyObj('ActivatedRoute', ['']),
-  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -139,13 +132,14 @@ describe('CarListContainerComponent - through the url/state ?q=foo ', () => {
       providers: [
         {
           provide: ActivatedRoute,
-          useValue: activatedRouteSpy, // 🤓 cuando se consulte en que url estamos usamos este espía.
+          useValue: {
+            queryParams: of({ q: 'foo' }),
+          }, // 🤓 cuando se consulte en que url estamos usamos este espía.
         },
       ],
     }).compileComponents();
 
     httpController = TestBed.inject(HttpTestingController);
-    httpClient = TestBed.inject(HttpClient);
   });
 
   beforeEach(() => {

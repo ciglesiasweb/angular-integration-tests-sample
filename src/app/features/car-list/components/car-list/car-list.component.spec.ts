@@ -1,10 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
@@ -48,9 +43,7 @@ describe('CarListComponent', () => {
       { id: 1, name: 'Peugeot 304 SW', brand: 'Peougeot', model: '304' },
       { id: 2, name: 'Peugeot 308 SW', brand: 'Peougeot', model: '308' },
     ];
-
-    const q$ = cold('---x|', { x: responseCarsApi });
-    listSpy.and.returnValue(q$);
+    listSpy.and.returnValue(cold('---x|', { x: responseCarsApi }));
     fixture.detectChanges();
     const nativeElement = fixture.debugElement.nativeElement;
     expect(getBySel(nativeElement, 'loader'))
@@ -78,8 +71,7 @@ describe('CarListComponent', () => {
   });
 
   it('should show a message with no data if api returns empty array', () => {
-    const q$ = cold('---x|', { x: [] });
-    listSpy.and.returnValue(q$);
+    listSpy.and.returnValue(cold('---x|', { x: [] }));
     fixture.detectChanges();
     const nativeElement = fixture.debugElement.nativeElement;
     expect(getBySel(nativeElement, 'loader'))
